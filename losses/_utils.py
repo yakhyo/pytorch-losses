@@ -1,5 +1,7 @@
-import torch
 from typing import Tuple
+
+import torch
+
 
 class ActivationFunction:
     """Alias for activation function"""

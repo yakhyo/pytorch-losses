@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional, Tuple, Union
+from typing import Union
 
 import torch
 
@@ -6,19 +6,17 @@ from _utils import ActivationFunction, LossReduction
 from torch import nn
 from torch.nn import functional as F
 
-__all__ = ["DiceLoss", "DiceCELoss"]
+__all__ = ["DiceLoss"]
 
 
 class DiceLoss(nn.Module):
     def __init__(
             self,
-            include_background: bool = True,
             reduction: Union[LossReduction, str] = LossReduction.MEAN,
             epsilon: float = 1e-5,
-            activation: Union[ActivationFunction, str] = ActivationFunction.SOFTMAX
+            activation: Union[ActivationFunction, str] = ActivationFunction.SOFTMAX,
     ) -> None:
         super().__init__()
-        self.include_background = include_background
         self.epsilon = epsilon
         self.activation = activation
         self.reduction = reduction
@@ -31,16 +29,6 @@ class DiceLoss(nn.Module):
             inputs = torch.sigmoid(inputs)
 
         targets = F.one_hot(targets, inputs.shape[1]).permute(0, 3, 1, 2)
-
-        if not self.include_background:
-            if inputs.shape[1] == 1:
-                raise Warning(
-                    "Single channel prediction, `include_background=False` ignored"
-                )
-            else:
-                # if skipping background, removing first channel
-                targets = targets[:, 1:]
-                inputs = inputs[:, 1:]
 
         if targets.shape != inputs.shape:
             raise AssertionError(
@@ -62,36 +50,10 @@ class DiceLoss(nn.Module):
         elif self.reduction == LossReduction.SUM:
             loss = torch.sum(loss)
         elif self.reduction == LossReduction.NONE:
-            # If we are not computing voxel-wise loss components at least
-            # make sure a none reduction maintains a broadcastable shape
-            broadcast_shape = list(loss.shape[0:2]) + [1] * (len(inputs.shape) - 2)
-            loss = loss.view(broadcast_shape)
+            pass
         else:
             raise ValueError(
                 f"Unsupported reduction: {self.reduction}, Supported options are: 'mean', 'sum', 'none'"
             )
 
         return loss
-
-
-class DiceCELoss(nn.Module):
-    """Cross Entropy Dice Loss"""
-
-    def __init__(
-            self,
-            include_background: bool = True,
-            epsilon: float = 1e-5,
-            activation: Union[ActivationFunction, str] = ActivationFunction.SOFTMAX,
-            reduction: Union[LossReduction, str] = LossReduction.MEAN,
-    ) -> None:
-        super().__init__()
-        self.ce = nn.CrossEntropyLoss(reduction=reduction)
-        self.dice = DiceLoss(include_background, epsilon, activation, reduction)
-
-    def __call__(
-            self, inputs: torch.Tensor, targets: torch.Tensor
-    ) -> Tuple[Any, Dict[str, Any]]:
-        ce_loss = self.ce(inputs, targets)
-        dice_loss = self.dice(inputs, targets)
-
-        return ce_loss + dice_loss

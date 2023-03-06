@@ -1,8 +1,9 @@
-import torch
-from torch import nn
-
-from _utils import LossReduction, _loss_inter_union
 from typing import Union
+
+import torch
+
+from _utils import _loss_inter_union, LossReduction
+from torch import nn
 
 
 class GIOULoss(nn.Module):
@@ -11,7 +12,7 @@ class GIOULoss(nn.Module):
     def __init__(
             self,
             reduction: Union[LossReduction, str] = LossReduction.NONE,
-            epsilon: float = 1e-7
+            epsilon: float = 1e-7,
     ):
         super().__init__()
         self.reduction = reduction
