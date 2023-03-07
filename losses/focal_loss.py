@@ -11,9 +11,9 @@ __all__ = ["FocalLoss"]
 class FocalLoss(nn.Module):
     def __init__(
             self,
+            reduction: Union[LossReduction, str] = LossReduction.NONE,
             alpha: float = 0.25,
             gamma: float = 2,
-            reduction: Union[LossReduction, str] = LossReduction.NONE,
             activation: Union[ActivationFunction, str] = ActivationFunction.SIGMOID,
     ):
         super().__init__()
