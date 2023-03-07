@@ -2,26 +2,24 @@ from typing import Union
 
 import torch
 
-from _utils import ActivationFunction, LossReduction
+from _utils import LossReduction
 from torch import nn
+from torch.nn import functional as F
 
-__all__ = ["FocalLoss"]
+__all__ = ["BinaryFocalLoss"]
 
 
-class FocalLoss(nn.Module):
+class BinaryFocalLoss(nn.Module):
     def __init__(
             self,
             reduction: Union[LossReduction, str] = LossReduction.NONE,
             alpha: float = 0.25,
             gamma: float = 2,
-            activation: Union[ActivationFunction, str] = ActivationFunction.SIGMOID,
     ):
         super().__init__()
         self.alpha = alpha
         self.gamma = gamma
         self.reduction = reduction
-        self.activation = activation
-        self.bce = nn.BCELoss(reduction=LossReduction.NONE)
 
     def forward(self, inputs: torch.Tensor, targets: torch.Tensor) -> torch.Tensor:
         inputs = inputs.float()
@@ -33,7 +31,7 @@ class FocalLoss(nn.Module):
             )
 
         prob = torch.sigmoid(inputs)
-        ce_loss = self.bce(inputs, targets)
+        bce = F.binary_cross_entropy(inputs, targets, reduction=LossReduction.NONE)
 
         pt = prob * targets + (1 - prob) * (1 - targets)
 
@@ -46,7 +44,7 @@ class FocalLoss(nn.Module):
         if self.gamma:
             modulating_factor = (1 - pt) ** self.gamma
 
-        loss = ce_loss * alpha_factor * modulating_factor
+        loss = bce * alpha_factor * modulating_factor  # focal loss
 
         if self.reduction == LossReduction.MEAN:
             loss = torch.mean(loss)
@@ -60,3 +58,11 @@ class FocalLoss(nn.Module):
             )
 
         return loss
+
+
+class SigmoidFocalLoss(nn.Module):
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, inputs: torch.Tensor, outputs: torch.Tensor) -> torch.Tensor:
+        pass

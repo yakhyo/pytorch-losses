@@ -9,6 +9,7 @@ __all__ = ["PolyCELoss", "SmoothPolyCELoss"]
 
 # TODO: Add focal poly loss
 
+
 class PolyCELoss(nn.Module):
     """Poly Cross Entropy Loss"""
 
@@ -49,7 +50,7 @@ class SmoothPolyCELoss(nn.Module):
     """Smooth Poly Cross Entropy Loss, alpha=0.1"""
 
     def __init__(
-            self, reduction: LossReduction.MEAN, epsilon: float = 1.0, alpha: float = 0.1
+        self, reduction: LossReduction.MEAN, epsilon: float = 1.0, alpha: float = 0.1
     ) -> None:
         super().__init__()
         self.reduction = reduction

@@ -4,7 +4,7 @@ import torch
 
 
 def smooth_l1_loss(
-        input: torch.Tensor, target: torch.Tensor, beta: float, reduction: str = "none"
+    input: torch.Tensor, target: torch.Tensor, beta: float, reduction: str = "none"
 ) -> torch.Tensor:
     """
     Smooth L1 loss defined in the Fast R-CNN paper as:
@@ -57,7 +57,7 @@ def smooth_l1_loss(
         n = torch.abs(input - target)
         cond = n < beta
         # pyre-fixme[58]: `**` is not supported for operand types `Tensor` and `int`.
-        loss = torch.where(cond, 0.5 * n ** 2 / beta, n - 0.5 * beta)
+        loss = torch.where(cond, 0.5 * n**2 / beta, n - 0.5 * beta)
 
     if reduction == "mean":
         loss = loss.mean() if loss.numel() > 0 else 0.0 * loss.sum()

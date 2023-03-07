@@ -10,9 +10,9 @@ class GIOULoss(nn.Module):
     """Generalized box IOU Loss"""
 
     def __init__(
-            self,
-            reduction: Union[LossReduction, str] = LossReduction.NONE,
-            epsilon: float = 1e-7,
+        self,
+        reduction: Union[LossReduction, str] = LossReduction.NONE,
+        epsilon: float = 1e-7,
     ):
         super().__init__()
         self.reduction = reduction

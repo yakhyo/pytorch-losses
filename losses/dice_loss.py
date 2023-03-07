@@ -43,7 +43,8 @@ class DiceLoss(nn.Module):
         denominator = torch.sum(inputs) + torch.sum(targets)
 
         # calculate the dice loss
-        loss = 1.0 - (2.0 * intersection + self.epsilon) / (denominator + self.epsilon)
+        dice_coeff = (2.0 * intersection + self.epsilon) / (denominator + self.epsilon)
+        loss = 1.0 - dice_coeff
 
         if self.reduction == LossReduction.MEAN:
             loss = torch.mean(loss)
