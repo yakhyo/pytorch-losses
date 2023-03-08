@@ -2,14 +2,16 @@
 
 ## Table of Contents
 
-- [Binary Cross-Entropy Loss](#)
-- [Categorical Cross-Entropy Loss](#)
-- [Mean Squared Error Loss](#)
-- [Mean Absolute Error Loss](#)
-- [Focal Loss](./losses/focal_loss.py)
-- [Dice Loss](./losses/dice_loss.py) and [Dice Cross Entropy Loss](./losses/dice_ce_loss.py)
-- [Poly Loss](./losses/poly_loss.py)
-- [Asymmetric Loss](./losses/asymmetric_loss.py:10), [Optimized Asymmetric Loss](./losses/asymmetric_loss.py:63) and [Asymmetric Single Label Loss](./losses/asymmetric_loss.py:126)
+- [Binary Cross-Entropy Loss](#) - ❎
+- [Categorical Cross-Entropy Loss](#) - ❎
+- [Mean Squared Error Loss](#) - ❎
+- [Mean Absolute Error Loss](#) - ❎
+- [Focal Loss](./losses/focal_loss.py) - ✅
+- [Dice Loss](./losses/dice_loss.py) and [Dice Cross Entropy Loss](./losses/dice_ce_loss.py) - ✅
+- [Poly Loss](./losses/poly_loss.py) - ✅
+- [Asymmetric Loss](./losses/asymmetric_loss.py:10), [Optimized Asymmetric Loss](./losses/asymmetric_loss.py:63) - ✅
+  and [Asymmetric Single Label Loss](./losses/asymmetric_loss.py:126) - ✅
+
 
 1. **Binary Cross-Entropy Loss**: This is a loss function used for binary classification tasks. It measures the
    difference
