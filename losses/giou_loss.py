@@ -1,18 +1,18 @@
 from typing import Union
 
 import torch
-
-from _utils import _loss_inter_union, LossReduction
 from torch import nn
+
+from utils import _loss_inter_union, LossReduction
 
 
 class GIOULoss(nn.Module):
     """Generalized box IOU Loss"""
 
     def __init__(
-        self,
-        reduction: Union[LossReduction, str] = LossReduction.NONE,
-        epsilon: float = 1e-7,
+            self,
+            reduction: Union[LossReduction, str] = LossReduction.NONE,
+            epsilon: float = 1e-7,
     ):
         super().__init__()
         self.reduction = reduction

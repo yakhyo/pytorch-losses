@@ -1,60 +1,100 @@
-from typing import Union
+from typing import Optional
 
 import torch
-
-from _utils import ActivationFunction, LossReduction
 from torch import nn
 from torch.nn import functional as F
 
-__all__ = ["DiceLoss"]
+from utils import weight_reduce_loss
+
+__all__ = ["DiceLoss", "DiceCELoss"]
+
+
+def dice_loss(
+        inputs: torch.Tensor,
+        targets: torch.Tensor,
+        weight: Optional[torch.Tensor] = None,
+        reduction: str = "none",
+        eps: float = 1e-5,
+) -> torch.Tensor:
+    inputs = F.softmax(inputs, dim=1)
+    targets = F.one_hot(targets, inputs.shape[1]).permute(0, 3, 1, 2)
+
+    if targets.shape != inputs.shape:
+        raise AssertionError(
+            f"Ground truth has different shape ({targets.shape}) from input ({inputs.shape})"
+        )
+
+    # flatten prediction and label tensors
+    inputs = inputs.flatten()
+    targets = targets.flatten()
+
+    intersection = torch.sum(inputs * targets)
+    denominator = torch.sum(inputs) + torch.sum(targets)
+
+    # calculate the dice loss
+    dice_score = (2.0 * intersection + eps) / (denominator + eps)
+    loss = 1 - dice_score
+
+    if weight is not None:
+        assert weight.ndim == loss.ndim
+        assert len(weight) == len(inputs)
+    loss = weight_reduce_loss(loss, weight, reduction=reduction)
+
+    return loss
 
 
 class DiceLoss(nn.Module):
     def __init__(
             self,
-            reduction: Union[LossReduction, str] = LossReduction.MEAN,
-            epsilon: float = 1e-5,
-            activation: Union[ActivationFunction, str] = ActivationFunction.SOFTMAX,
-    ) -> None:
+            reduction: str = "mean",
+            loss_weight: Optional[float] = 1.0,
+            eps: float = 1e-5,
+    ):
         super().__init__()
-        self.epsilon = epsilon
-        self.activation = activation
         self.reduction = reduction
+        self.loss_weight = loss_weight
+        self.eps = eps
 
-    def forward(self, inputs: torch.Tensor, targets: torch.Tensor) -> torch.Tensor:
+    def forward(
+            self,
+            inputs: torch.Tensor,
+            targets: torch.Tensor,
+            weight: Optional[torch.Tensor] = None,
+    ):
+        loss = self.loss_weight * dice_loss(
+            inputs, targets, weight=weight, reduction=self.reduction, eps=self.eps
+        )
 
-        if self.activation == ActivationFunction.SOFTMAX:
-            inputs = torch.softmax(inputs, dim=1)
-        if self.activation == ActivationFunction.SIGMOID:
-            inputs = torch.sigmoid(inputs)
+        return loss
 
-        targets = F.one_hot(targets, inputs.shape[1]).permute(0, 3, 1, 2)
 
-        if targets.shape != inputs.shape:
-            raise AssertionError(
-                f"Ground truth has different shape ({targets.shape}) from input ({inputs.shape})"
-            )
+class DiceCELoss(nn.Module):
+    def __init__(
+            self,
+            reduction: str = "mean",
+            dice_weight: float = 1.0,
+            ce_weight: float = 1.0,
+            eps: float = 1e-5,
+    ):
+        super().__init__()
+        self.reduction = reduction
+        self.dice_weight = dice_weight
+        self.ce_weight = ce_weight
+        self.eps = eps
 
-        # flatten prediction and label tensors
-        inputs = inputs.flatten()
-        targets = targets.flatten()
-
-        intersection = torch.sum(inputs * targets)
-        denominator = torch.sum(inputs) + torch.sum(targets)
-
-        # calculate the dice loss
-        dice_coeff = (2.0 * intersection + self.epsilon) / (denominator + self.epsilon)
-        loss = 1.0 - dice_coeff
-
-        if self.reduction == LossReduction.MEAN:
-            loss = torch.mean(loss)
-        elif self.reduction == LossReduction.SUM:
-            loss = torch.sum(loss)
-        elif self.reduction == LossReduction.NONE:
-            pass
-        else:
-            raise ValueError(
-                f"Unsupported reduction: {self.reduction}, Supported options are: 'mean', 'sum', 'none'"
-            )
+    def forward(
+            self,
+            inputs: torch.Tensor,
+            targets: torch.Tensor,
+            weight: Optional[torch.Tensor] = None
+    ) -> torch.Tensor:
+        # calculate dice loss
+        dice = dice_loss(
+            inputs, targets, weight=weight, reduction=self.reduction, eps=self.eps
+        )
+        # calculate cross entropy loss
+        ce = F.cross_entropy(inputs, targets, weight=weight, reduction=self.reduction)
+        # loss accumulation
+        loss = self.dice_weight * dice + ce * self.ce_weight
 
         return loss

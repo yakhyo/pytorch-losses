@@ -2,7 +2,7 @@ from typing import Union
 
 import torch
 import torch.nn as nn
-from _utils import LossReduction
+from utils import LossReduction
 
 __all__ = ["AsymmetricLoss", "AsymmetricLossOptimized", "ASLSingleLabel"]
 

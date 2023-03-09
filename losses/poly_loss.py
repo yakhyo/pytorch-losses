@@ -1,8 +1,8 @@
 import torch
-
-from _utils import LossReduction
 from torch import nn
 from torch.nn import functional as F
+
+from utils import LossReduction
 
 __all__ = ["PolyCELoss", "SmoothPolyCELoss"]
 
@@ -50,7 +50,7 @@ class SmoothPolyCELoss(nn.Module):
     """Smooth Poly Cross Entropy Loss, alpha=0.1"""
 
     def __init__(
-        self, reduction: LossReduction.MEAN, epsilon: float = 1.0, alpha: float = 0.1
+            self, reduction: LossReduction.MEAN, epsilon: float = 1.0, alpha: float = 0.1
     ) -> None:
         super().__init__()
         self.reduction = reduction

@@ -1,10 +1,10 @@
 from typing import Union
 
 import torch
-
-from _utils import LossReduction
 from torch import nn
 from torch.nn import functional as F
+
+from utils import LossReduction
 
 __all__ = ["BinaryFocalLoss"]
 
