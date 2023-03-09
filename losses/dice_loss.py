@@ -19,7 +19,7 @@ def dice_loss(
     inputs = F.softmax(inputs, dim=1)
     targets = F.one_hot(targets, inputs.shape[1]).permute(0, 3, 1, 2)
 
-    if targets.shape != inputs.shape:
+    if inputs.shape != targets.shape:
         raise AssertionError(
             f"Ground truth has different shape ({targets.shape}) from input ({inputs.shape})"
         )
@@ -94,7 +94,7 @@ class DiceCELoss(nn.Module):
         )
         # calculate cross entropy loss
         ce = F.cross_entropy(inputs, targets, weight=weight, reduction=self.reduction)
-        # loss accumulation
+        # accumulate loss according to given weights
         loss = self.dice_weight * dice + ce * self.ce_weight
 
         return loss
