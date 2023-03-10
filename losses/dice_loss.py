@@ -4,43 +4,9 @@ import torch
 from torch import nn
 from torch.nn import functional as F
 
-from utils import weight_reduce_loss
+from losses.functional import dice_loss
 
 __all__ = ["DiceLoss", "DiceCELoss"]
-
-
-def dice_loss(
-        inputs: torch.Tensor,
-        targets: torch.Tensor,
-        weight: Optional[torch.Tensor] = None,
-        reduction: str = "none",
-        eps: float = 1e-5,
-) -> torch.Tensor:
-    inputs = F.softmax(inputs, dim=1)
-    targets = F.one_hot(targets, inputs.shape[1]).permute(0, 3, 1, 2)
-
-    if inputs.shape != targets.shape:
-        raise AssertionError(
-            f"Ground truth has different shape ({targets.shape}) from input ({inputs.shape})"
-        )
-
-    # flatten prediction and label tensors
-    inputs = inputs.flatten()
-    targets = targets.flatten()
-
-    intersection = torch.sum(inputs * targets)
-    denominator = torch.sum(inputs) + torch.sum(targets)
-
-    # calculate the dice loss
-    dice_score = (2.0 * intersection + eps) / (denominator + eps)
-    loss = 1 - dice_score
-
-    if weight is not None:
-        assert weight.ndim == loss.ndim
-        assert len(weight) == len(inputs)
-    loss = weight_reduce_loss(loss, weight, reduction=reduction)
-
-    return loss
 
 
 class DiceLoss(nn.Module):

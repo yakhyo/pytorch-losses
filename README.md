@@ -1,67 +1,74 @@
-# Common loss functions using PyTorch
+# Computer Vision Project
+
+This is a computer vision project that involves implementing various computer vision techniques to perform tasks like
+image classification, object detection, and image segmentation.
 
 ## Table of Contents
 
-- [Binary Cross-Entropy Loss](#) - ❎
-- [Categorical Cross-Entropy Loss](#) - ❎
-- [Mean Squared Error Loss](#) - ❎
-- [Mean Absolute Error Loss](#) - ❎
-- [Focal Loss](./losses/focal_loss.py) - ✅
-- [Dice Loss](./losses/dice_loss.py) and [Dice Cross Entropy Loss](./losses/dice_ce_loss.py) - ✅
-- [Poly Loss](./losses/poly_loss.py) - ✅
-- [Asymmetric Loss](./losses/asymmetric_loss.py:10), [Optimized Asymmetric Loss](./losses/asymmetric_loss.py:63) - ✅
-  and [Asymmetric Single Label Loss](./losses/asymmetric_loss.py:126) - ✅
+- [Project Description](#project-description)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [License](#license)
 
+## Project Description
 
-1. **Binary Cross-Entropy Loss**: This is a loss function used for binary classification tasks. It measures the
-   difference
-   between the predicted probability distribution and the true probability distribution. The formula for binary
-   cross-entropy loss is:
+The project involves implementing computer vision techniques using Python and OpenCV library. The following tasks are
+performed in this project:
 
-   `L = -[y*log(p) + (1-y)*log(1-p)]`
+- **Image Classification**: We use pre-trained models like VGG16, VGG19, and ResNet50 to classify images into different
+  categories. The dataset used for this task is CIFAR-10.
 
-   where y is the true label (0 or 1), p is the predicted probability (between 0 and 1).
+- **Object Detection**: We use the YOLOv3 model to detect objects in images. The model is trained on the COCO dataset
+  and can detect up to 80 different objects.
 
-2. **Categorical Cross-Entropy Loss**: This is a loss function used for multi-class classification tasks. It measures
-   the
-   difference between the predicted probability distribution and the true probability distribution. The formula for
-   categorical cross-entropy loss is:
+- **Image Segmentation**: We use the Mask R-CNN model to perform image segmentation. The model is trained on the COCO
+  dataset and can segment various objects in an image.
 
-   `L = -sum(y*log(p))`
+## Installation
 
-   where y is a one-hot encoded vector of the true label, and p is the predicted probability distribution over all the
-   classes.
+To install the project, follow the steps below:
 
-3. **Mean Squared Error (MSE) Loss**: This is a loss function used for regression tasks. It measures the average squared
-   difference between the predicted and true values. The formula for MSE loss is:
+1. Clone the repository to your local machine.
 
-   `L = 1/n * sum((y - p)^2)`
+```commandline
+git clone https://github.com/your-username/computer-vision-project.git
+```
 
-   where y is the true value, p is the predicted value, and n is the number of samples.
+2. Navigate to the project directory.
 
-4. **Mean Absolute Error (MAE) Loss**: This is a loss function used for regression tasks. It measures the average
-   absolute
-   difference between the predicted and true values. The formula for MAE loss is:
+```commandline
+cd computer-vision-project
+```
 
-   `L = 1/n * sum(|y - p|)`
+3. Install the required packages.
+   pip install -r requirements.txt
 
-   where y is the true value, p is the predicted value, and n is the number of samples.
+## Usage
 
-5. **Focal Loss**: This is a loss function designed to address class imbalance problems in classification tasks. It
-   assigns
-   higher weights to hard examples (i.e., those that are misclassified with high confidence). The formula for focal loss
-   is:
-   `L = -alpha * (1-p)^gamma * log(p)`
+To use the project, follow the steps below:
 
-   where p is the predicted probability, alpha is a balancing factor between positive and negative examples, and gamma
-   is a
-   focusing parameter that controls the weight assigned to hard examples.
+1. Navigate to the project directory.
 
-6. **Dice Loss**: This is a loss function used for segmentation tasks. It measures the overlap between the predicted and
-   true segmentation masks. The formula for dice loss is:
+```commandline
+cd computer-vision-project
+```
 
-   `L = 1 - (2*|X intersect Y| + smooth) / (|X| + |Y| + smooth)`
+2. Run the desired script. For example, to classify an image, run the following command:
 
-   where X is the predicted mask, Y is the true mask, |.| denotes the number of pixels, and smooth is a smoothing factor
-   to
-   avoid division by zero.
+```commandline
+python classify_image.py --image_path /path/to/image.jpg
+```
+
+## Contributing
+
+Contributions to the project are welcome. To contribute, follow the steps below:
+
+1. Fork the repository.
+2. Create a new branch.
+3. Make your changes and commit them.
+4. Push to your fork and submit a pull request.
+
+## License
+
+The project is licensed under the [MIT license](https://opensource.org/licenses/MIT).
