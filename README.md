@@ -1,74 +1,57 @@
-# Computer Vision Project
+# Project Title
 
-This is a computer vision project that involves implementing various computer vision techniques to perform tasks like
-image classification, object detection, and image segmentation.
+This project implements different loss functions using PyTorch.
 
 ## Table of Contents
 
-- [Project Description](#project-description)
+- [Introduction](#introduction)
 - [Installation](#installation)
 - [Usage](#usage)
+- [Loss Functions](#loss-functions)
+- [Examples](#examples)
 - [Contributing](#contributing)
 - [License](#license)
 
-## Project Description
-
-The project involves implementing computer vision techniques using Python and OpenCV library. The following tasks are
-performed in this project:
-
-- **Image Classification**: We use pre-trained models like VGG16, VGG19, and ResNet50 to classify images into different
-  categories. The dataset used for this task is CIFAR-10.
-
-- **Object Detection**: We use the YOLOv3 model to detect objects in images. The model is trained on the COCO dataset
-  and can detect up to 80 different objects.
-
-- **Image Segmentation**: We use the Mask R-CNN model to perform image segmentation. The model is trained on the COCO
-  dataset and can segment various objects in an image.
+## Introduction
 
 ## Installation
 
-To install the project, follow the steps below:
-
-1. Clone the repository to your local machine.
-
-```commandline
-git clone https://github.com/your-username/computer-vision-project.git
-```
-
-2. Navigate to the project directory.
-
-```commandline
-cd computer-vision-project
-```
-
-3. Install the required packages.
-   pip install -r requirements.txt
-
 ## Usage
 
-To use the project, follow the steps below:
+```python
+from losses import CrossEntropyLoss, DiceLoss, DiceCELoss, FocalLoss
 
-1. Navigate to the project directory.
-
-```commandline
-cd computer-vision-project
+# input is logits of (N, *)
+# target is (N, C), C is class index
+criterion = DiceLoss()
+loss = criterion(input, target)
 ```
 
-2. Run the desired script. For example, to classify an image, run the following command:
+## Loss Functions
 
-```commandline
-python classify_image.py --image_path /path/to/image.jpg
-```
+This project implements the following loss functions:
+
+| Loss Name                      | Status          | Link                                                    | Task         |
+|--------------------------------|-----------------|---------------------------------------------------------|--------------|
+| Cross-entropy loss             | ✅ passed        | [cross_entropy_loss.py](./losses/cross_entropy_loss.py) | Segmentation |
+| Binary cross-entropy loss      | Row 2, Column 2 | Row 2, Column 3                                         |              |
+| Mean squared error (MSE) loss  | Row 3, Column 2 | Row 3, Column 3                                         |              |
+| Mean absolute error (MAE) loss | Row 4, Column 2 | Row 4, Column 3                                         |              |
+| Dice loss                      | ✅ passed        | [dice_loss.py](./losses/dice_loss.py)                   | Segmentation |
+| Dice Cross Entropy loss        | ✅ passed        | [dice_loss.py](./losses/dice_loss.py)                   | Segmentation |
+| Focal loss                     | ✅ passed        | [focal_loss.py](./losses/focal_loss.py)                 | Segmentation |
+
+## Examples
+
+[//]: # (We have included several examples in the `examples` directory to demonstrate the usage of the implemented loss)
+
+[//]: # (functions. Each example includes a README file with detailed instructions on how to run it.)
 
 ## Contributing
 
-Contributions to the project are welcome. To contribute, follow the steps below:
-
-1. Fork the repository.
-2. Create a new branch.
-3. Make your changes and commit them.
-4. Push to your fork and submit a pull request.
+Contributions are welcome! If you have a suggestion for a new loss function or an improvement to an existing one, please
+open an issue or a pull request.
 
 ## License
 
-The project is licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is licensed under the MIT License - see the `LICENSE` file for details.
