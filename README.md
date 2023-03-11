@@ -31,15 +31,17 @@ loss = criterion(input, target)
 
 This project implements the following loss functions:
 
-| Loss Name                      | Status          | Link                                                    | Task         |
-|--------------------------------|-----------------|---------------------------------------------------------|--------------|
-| Cross-entropy loss             | ✅ passed        | [cross_entropy_loss.py](./losses/cross_entropy_loss.py) | Segmentation |
-| Binary cross-entropy loss      | Row 2, Column 2 | Row 2, Column 3                                         |              |
-| Mean squared error (MSE) loss  | Row 3, Column 2 | Row 3, Column 3                                         |              |
-| Mean absolute error (MAE) loss | Row 4, Column 2 | Row 4, Column 3                                         |              |
-| Dice loss                      | ✅ passed        | [dice_loss.py](./losses/dice_loss.py)                   | Segmentation |
-| Dice Cross Entropy loss        | ✅ passed        | [dice_loss.py](./losses/dice_loss.py)                   | Segmentation |
-| Focal loss                     | ✅ passed        | [focal_loss.py](./losses/focal_loss.py)                 | Segmentation |
+| Loss Name                      | Status          | Link                                                    | Task           |
+|--------------------------------|-----------------|---------------------------------------------------------|----------------|
+| Cross-entropy loss             | ✅ passed        | [cross_entropy_loss.py](./losses/cross_entropy_loss.py) | Segmentation   |
+| Binary cross-entropy loss      | Row 2, Column 2 | Row 2, Column 3                                         |                |
+| Mean squared error (MSE) loss  | Row 3, Column 2 | Row 3, Column 3                                         |                |
+| Mean absolute error (MAE) loss | Row 4, Column 2 | Row 4, Column 3                                         |                |
+| Dice loss                      | ✅ passed        | [dice_loss.py](./losses/dice_loss.py)                   | Segmentation   |
+| Dice Cross Entropy loss        | ✅ passed        | [dice_loss.py](./losses/dice_loss.py)                   | Segmentation   |
+| Focal loss                     | ✅ passed        | [focal_loss.py](./losses/focal_loss.py)                 | Segmentation   |
+| Poly Cross Entropy Loss        | ✅ passed        | [poly_loss.py](./losses/poly_loss.py)                   | Classification |
+| Smooth Poly Loss               | ✅ passed        | [poly_loss.py](./losses/poly_loss.py)                   | Classification |
 
 ## Examples
 

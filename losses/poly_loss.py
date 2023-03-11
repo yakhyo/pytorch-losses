@@ -19,7 +19,7 @@ class PolyCELoss(nn.Module):
         self.epsilon = epsilon
 
     def forward(self, inputs: torch.Tensor, targets: torch.Tensor) -> torch.Tensor:
-        inputs = torch.softmax(inputs, dim=-1)
+        inputs = torch.softmax(inputs, dim=1)
         targets = F.one_hot(targets, inputs.shape[1])
 
         if targets.shape != inputs.shape:
