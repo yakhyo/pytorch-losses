@@ -3,9 +3,43 @@ from typing import Optional
 
 import torch
 from torch import nn
+from torch.nn import functional as F
 
-from losses._utils import LossReduction
-from losses.functional import cross_entropy
+from losses._utils import LossReduction, weight_reduce_loss
+
+
+def cross_entropy(
+    inputs: torch.Tensor,
+    targets: torch.Tensor,
+    weight: Optional[torch.Tensor] = None,
+    class_weight: Optional[torch.Tensor] = None,
+    reduction: LossReduction = "mean",
+    ignore_index: int = -100,
+) -> torch.Tensor:
+    """Cross entropy loss calculation function
+    Args:
+        inputs: input tensor
+        targets: target tensor
+        weight: loss weight
+        class_weight: class weights
+        reduction: reduction mode
+        ignore_index: cross entropy param
+    Returns:
+        torch.Tensor
+    """
+    loss = F.cross_entropy(
+        inputs,
+        targets,
+        weight=class_weight,
+        reduction="none",
+        ignore_index=ignore_index,
+    )
+
+    if weight is not None:
+        weight = weight.float()
+    loss = weight_reduce_loss(loss, weight=weight, reduction=reduction)
+
+    return loss
 
 
 class CrossEntropyLoss(nn.Module):
@@ -35,7 +69,7 @@ class CrossEntropyLoss(nn.Module):
             targets: target tensor
             weight: loss weight
             ignore_index: cross entropy param
-        Return:
+        Returns:
              torch.Tensor
         """
         loss = self.loss_weight * cross_entropy(
