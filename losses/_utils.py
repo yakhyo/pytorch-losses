@@ -1,7 +1,11 @@
+"""Helper function and classes"""
+from enum import Enum
+from typing import Optional
+
 import torch
 
 
-class LossReduction:
+class LossReduction(Enum):
     """Alias for loss reduction"""
 
     NONE = "none"
@@ -9,14 +13,18 @@ class LossReduction:
     SUM = "sum"
 
 
-def weight_reduce_loss(loss, weight=None, reduction="mean"):
+def weight_reduce_loss(
+    loss: torch.Tensor,
+    weight: Optional[torch.Tensor] = None,
+    reduction: LossReduction = "mean",
+):
     """Apply element-wise weight and reduce loss.
     Args:
-        loss (Tensor): Element-wise loss.
-        weight (Tensor): Element-wise weights.
-        reduction (str): Same as built-in losses of PyTorch.
+        loss: element-wise loss
+        weight: element-wise weight
+        reduction: reduction mode
     Returns:
-        Tensor: Processed loss values.
+        torch.Tensor
     """
     # if weight is specified, apply element-wise weight
     if weight is not None:

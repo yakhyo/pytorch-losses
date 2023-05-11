@@ -1,8 +1,6 @@
-# base
-torch
-
-# pip install -r requirements.txt
+black
+isort
 pre-commit
-flake8
-ufmt
-pydocstyle
+pylint
+
+torch
