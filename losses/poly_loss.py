@@ -26,7 +26,7 @@ class PolyCELoss(nn.Module):
         Args:
             inputs: input tensor
             targets: target tensor
-        Return:
+        Returns:
             torch.Tensor
         """
         inputs = torch.softmax(inputs, dim=1)
@@ -79,7 +79,7 @@ class SmoothPolyCELoss(nn.Module):
         Args:
             inputs: input tensor
             targets: target tensor
-        Return:
+        Returns:
             torch.Tensor
         """
         inputs = torch.softmax(inputs, dim=-1)
