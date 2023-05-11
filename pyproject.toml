@@ -1,0 +1,17 @@
+[project]
+name = "project-template"
+version = "0.0.0"
+authors = [
+    {name = "Yakhyokhuja Valikhujaev", email = "yakhyo9696@gmail.com"}
+]
+description = "Template for ML/DL projects"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {file = "LICENSE"}
+
+[tool.isort]
+line_length = 80
+profile = "black"
+
+[tool.black]
+line_length = 80
