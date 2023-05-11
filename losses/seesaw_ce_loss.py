@@ -7,7 +7,7 @@ from torch.nn import functional as F
 
 from losses._utils import LossReduction, weight_reduce_loss
 
-__all__ = ["seesaw_ce_loss"]
+__all__ = ["seesaw_ce_loss", "SeesawLoss"]
 
 
 def seesaw_ce_loss(
